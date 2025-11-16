@@ -15,6 +15,26 @@ html {
 	scroll-behavior: smooth;
 }
 
+@keyframes lagoon-bar-wave {
+	0%,
+	100% {
+		transform: scaleY(0.9);
+		opacity: 0.7;
+	}
+	50% {
+		transform: scaleY(1.08);
+		opacity: 1;
+	}
+}
+
+.lagoon-bar {
+	transform-origin: bottom;
+	animation-name: lagoon-bar-wave;
+	animation-duration: 2.4s;
+	animation-timing-function: ease-in-out;
+	animation-iteration-count: infinite;
+}
+
 /* Smooth scroll */
 /* 
 :root {
