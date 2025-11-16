@@ -25,7 +25,15 @@ const Layout: React.FC = () => {
 			<div className="relative z-10 flex flex-col min-h-screen">
 				<Navbar />
 				<main className="flex-1 pt-20 pb-12">
-					<div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+					<div
+						className="
+      mx-auto 
+      w-full 
+       max-w-screen-2xl       /* wider than 6xl (80rem instead of 72rem) */
+      px-4 sm:px-6 
+      lg:px-8 xl:px-10  /* bit more on very large screens */
+    "
+					>
 						<Outlet />
 					</div>
 				</main>
