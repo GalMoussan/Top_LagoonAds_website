@@ -35,6 +35,7 @@ const Home: React.FC = () => {
 						</Link>
 					</div>
 
+
 					<dl className="mt-4 grid grid-cols-3 gap-4 max-w-md text-xs sm:text-sm">
 						<div>
 							<dt className="text-slate-400">Monthly clicks managed</dt>

@@ -1,4 +1,4 @@
-/* @tailwind base;
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
@@ -7,16 +7,16 @@ body,
 #root {
 	height: 100%;
 }
-
 body {
 	@apply font-sans bg-lagoon-dark text-slate-50 antialiased;
-} */
+}
 
-/* Smooth scroll */
 html {
 	scroll-behavior: smooth;
 }
 
+/* Smooth scroll */
+/* 
 :root {
 	font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
 	line-height: 1.5;
@@ -84,4 +84,4 @@ button:focus-visible {
 	button {
 		background-color: #f9f9f9;
 	}
-}
+} */
