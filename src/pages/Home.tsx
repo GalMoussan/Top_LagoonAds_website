@@ -3,10 +3,61 @@ import { Link } from 'react-router-dom';
 import Button from '../components/Button';
 import Card from '../components/Card';
 import TestimonialCarousel from '../components/TestimonialCarousel';
+import GridDistortion from '../components/GridDistortion';
 
 const Home: React.FC = () => {
 	return (
-		<div className="space-y-16 sm:space-y-20">
+		<div className="space-y-16">
+			<section className="relative">
+				<div className="relative h-[440px] sm:h-[520px] lg:h-[620px] rounded-4xl overflow-hidden border border-white/10 bg-slate-950/70 shadow-soft">
+					<GridDistortion
+						imageSrc="https://picsum.photos/1920/1080?grayscale"
+						grid={18}
+						mouse={0.25}
+						strength={0.5}
+						relaxation={0.94}
+						className="opacity-100"
+					/>
+
+
+					{/* Gradient veil so text is readable but background visible */}
+					<div className="pointer-events-none absolute inset-0 bg-gradient-to-br from-lagoon-dark/75 via-slate-950/40 to-lagoon-deep/80" />
+
+					{/* Foreground content */}
+					<div className="absolute inset-0 flex flex-col items-center justify-center text-center px-6">
+						<p className="text-xs sm:text-sm font-semibold uppercase tracking-[0.2em] text-lagoon-turquoise/80 mb-3">
+							Welcome to LagoonAds
+						</p>
+
+						<h1 className="text-3xl sm:text-5xl lg:text-6xl font-semibold tracking-tight mb-3">
+							LagoonAds
+						</h1>
+
+						<p className="text-lg sm:text-2xl lg:text-3xl font-medium text-slate-200 mb-6">
+							Breaking the scales
+						</p>
+
+						<p className="max-w-xl text-sm sm:text-base text-slate-300 mb-8">
+							A next-generation affiliate network built to squeeze more value from every click
+							while keeping your partners and users happy.
+						</p>
+
+						<div className="flex flex-wrap justify-center gap-3">
+							<Button onClick={() => (window.location.href = '/partners')}>
+								Join as an Affiliate
+							</Button>
+							<Button
+								variant="secondary"
+								onClick={() => (window.location.href = '/contact')}
+							>
+								Partner with Us
+							</Button>
+						</div>
+					</div>
+				</div>
+			</section>
+
+
 			{/* Hero */}
 			<section className="grid gap-10 md:grid-cols-[1.2fr,1fr] items-center">
 				<div className="space-y-6">
