@@ -273,20 +273,20 @@ const DotGrid: React.FC<DotGridProps> = ({
 					dot._inertiaApplied = true;
 					gsap.killTweensOf(dot);
 
-					const pushX = dot.cx - pr.x + vx * 0.005;
-					const pushY = dot.cy - pr.y + vy * 0.005;
+					const pushX = (dot.cx - pr.x) * 0.3 + vx * 0.0015;
+					const pushY = (dot.cy - pr.y) * 0.3 + vy * 0.0015;
 
 					gsap.to(dot, {
 						xOffset: pushX,
 						yOffset: pushY,
-						duration: 0.25,
-						ease: 'power2.out',
+						duration: 0.35,
+						ease: 'power3.out',
 						onComplete: () => {
 							gsap.to(dot, {
 								xOffset: 0,
 								yOffset: 0,
 								duration: returnDuration,
-								ease: 'elastic.out(1, 0.75)',
+								ease: 'elastic.out(1, 0.9)',
 								onComplete: () => {
 									dot._inertiaApplied = false;
 								}
@@ -311,20 +311,20 @@ const DotGrid: React.FC<DotGridProps> = ({
 					gsap.killTweensOf(dot);
 
 					const falloff = Math.max(0, 1 - dist / shockRadius);
-					const pushX = (dot.cx - cx) * shockStrength * falloff;
-					const pushY = (dot.cy - cy) * shockStrength * falloff;
+					const pushX = (dot.cx - cx) * shockStrength * 0.6 * falloff;
+					const pushY = (dot.cy - cy) * shockStrength * 0.6 * falloff;
 
 					gsap.to(dot, {
 						xOffset: pushX,
 						yOffset: pushY,
-						duration: 0.25,
-						ease: 'power2.out',
+						duration: 0.4,
+						ease: 'power3.out',
 						onComplete: () => {
 							gsap.to(dot, {
 								xOffset: 0,
 								yOffset: 0,
-								duration: returnDuration,
-								ease: 'elastic.out(1, 0.75)',
+								duration: returnDuration + 0.3,
+								ease: 'elastic.out(1, 0.9)',
 								onComplete: () => {
 									dot._inertiaApplied = false;
 								}
@@ -335,7 +335,7 @@ const DotGrid: React.FC<DotGridProps> = ({
 			}
 		};
 
-		const throttledMove: (e: MouseEvent) => void = throttle(onMove, 50);
+		const throttledMove: (e: MouseEvent) => void = throttle(onMove, 16);
 
 		window.addEventListener('mousemove', throttledMove, { passive: true });
 		window.addEventListener('click', onClick);

@@ -9,16 +9,16 @@ const Layout: React.FC = () => {
 		<div className="relative min-h-screen bg-lagoon-dark bg-lagoon-radial text-slate-50 overflow-hidden">
 			{/* Interactive dot grid background */}
 			<DotGrid
-				dotSize={10}
-				gap={18}
-				baseColor="#0f172a"          // dark slate-ish
-				activeColor="#38bdf8"        // lagoon blue when close
-				proximity={120}
-				shockRadius={260}
-				shockStrength={5}
-				resistance={750}
-				returnDuration={1.5}
-				className="opacity-25"
+				dotSize={9}
+				gap={22}
+				baseColor="#020617"        // very dark slate / lagoon base
+				activeColor="#38bdf8"      // lagoon blue when close
+				proximity={110}            // how close you need to be for color change
+				shockRadius={220}          // click ripple radius
+				shockStrength={3.5}        // base strength (rest is scaled in dot logic)
+				maxSpeed={2200}            // cap insane mouse flings
+				returnDuration={1.8}       // time to settle back
+				className="opacity-18"     // subtle overlay
 			/>
 
 			{/* Foreground app content */}
