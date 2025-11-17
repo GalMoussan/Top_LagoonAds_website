@@ -1,125 +1,173 @@
 import React, { useState } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
+import Button from './Button';
 
 const navItems = [
-	{ to: '/', label: 'Home' },
-	{ to: '/how-it-works', label: 'How It Works' },
-	{ to: '/partners', label: 'Partners & Affiliates' },
-	{ to: '/about', label: 'About' },
-	{ to: '/contact', label: 'Contact' }
+	{ label: 'Home', to: '/' },
+	{ label: 'How it works', to: '/how-it-works' },
+	{ label: 'Partners', to: '/partners' },
+	{ label: 'About', to: '/about' },
+	{ label: 'Contact', to: '/contact' }
 ];
 
 const Navbar: React.FC = () => {
 	const [open, setOpen] = useState(false);
+	const location = useLocation();
 
-	const linkClasses = ({ isActive }: { isActive: boolean }) =>
-		`text-sm font-medium transition-colors ${isActive ? 'text-lagoon-turquoise' : 'text-slate-200 hover:text-lagoon-blue'
-		}`;
+	const toggleMenu = () => setOpen((prev) => !prev);
+	const closeMenu = () => setOpen(false);
 
 	return (
-		<header className="fixed top-0 inset-x-0 z-40 backdrop-blur bg-slate-950/70 border-b border-white/5">
-			<nav
-				className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between h-16"
-				aria-label="Main navigation"
-			>
-				{/* Logo */}
-				<Link
-					to="/"
-					className="flex items-center gap-2"
-					aria-label="LagoonAds home"
-				>
-					<div className="h-9 w-9 rounded-2xl bg-gradient-to-br from-lagoon-blue to-lagoon-turquoise flex items-center justify-center shadow-soft">
-						<span className="text-xs font-bold tracking-tight text-slate-950">
-							LA
-						</span>
-					</div>
-					<div className="flex flex-col leading-none">
-						<span className="font-semibold text-sm text-slate-50">
-							LagoonAds
-						</span>
-						<span className="text-[11px] text-slate-400">
-							Affiliate Intelligence
-						</span>
-					</div>
-				</Link>
-
-				{/* Desktop nav */}
-				<div className="hidden md:flex items-center gap-8">
-					{navItems.map((item) => (
-						<NavLink key={item.to} to={item.to} className={linkClasses}>
-							{item.label}
-						</NavLink>
-					))}
-					<Link
-						to="/contact"
-						className="inline-flex items-center justify-center rounded-full bg-gradient-to-r from-lagoon-blue to-lagoon-turquoise px-4 py-2 text-sm font-semibold text-slate-950 shadow-soft hover:opacity-90 transition"
-					>
-						Get in touch
-					</Link>
-				</div>
-
-				{/* Mobile menu button */}
-				<button
-					type="button"
-					onClick={() => setOpen((v) => !v)}
-					className="md:hidden inline-flex items-center justify-center p-2 rounded-xl border border-white/10 text-slate-100 hover:bg-white/5 transition"
-					aria-label="Toggle navigation menu"
-				>
-					<span className="sr-only">Open main menu</span>
-					<svg
-						className="h-5 w-5"
-						viewBox="0 0 24 24"
-						fill="none"
-						aria-hidden="true"
-					>
-						{open ? (
-							<path
-								d="M6 18L18 6M6 6l12 12"
-								stroke="currentColor"
-								strokeWidth="1.8"
-								strokeLinecap="round"
-							/>
-						) : (
-							<path
-								d="M4 7h16M4 12h16M4 17h10"
-								stroke="currentColor"
-								strokeWidth="1.8"
-								strokeLinecap="round"
-							/>
-						)}
-					</svg>
-				</button>
-			</nav>
-
-			{/* Mobile nav panel */}
-			{open && (
-				<div className="md:hidden border-t border-white/5 bg-slate-950/95 backdrop-blur">
-					<div className="max-w-6xl mx-auto px-4 py-3 flex flex-col gap-2">
-						{navItems.map((item) => (
-							<NavLink
-								key={item.to}
-								to={item.to}
-								className={({ isActive }) =>
-									`block rounded-xl px-3 py-2 text-sm ${isActive
-										? 'bg-white/5 text-lagoon-turquoise'
-										: 'text-slate-200 hover:bg-white/5'
-									}`
-								}
-								onClick={() => setOpen(false)}
-							>
-								{item.label}
-							</NavLink>
-						))}
+		<header className="fixed top-0 inset-x-0 z-40">
+			{/* Glassy background */}
+			<div className="pointer-events-none absolute inset-0 bg-gradient-to-b from-black/25 via-black/10 to-transparent" />
+			<div className="backdrop-blur-xl border-b border-white/5 bg-slate-950/60">
+				<nav className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-20 flex items-center justify-between gap-4">
+					{/* Left: Logo */}
+					<div className="flex items-center gap-2">
 						<Link
-							to="/contact"
-							className="mt-1 inline-flex items-center justify-center rounded-full bg-gradient-to-r from-lagoon-blue to-lagoon-turquoise px-4 py-2 text-sm font-semibold text-slate-950 shadow-soft"
-							onClick={() => setOpen(false)}
+							to="/"
+							onClick={closeMenu}
+							className="flex items-center gap-2 group"
 						>
-							Get in touch
+							<div className="relative h-8 w-8 rounded-2xl bg-gradient-to-br from-lagoon-blue to-lagoon-turquoise shadow-soft flex items-center justify-center">
+								<span className="text-xs font-black tracking-tight text-slate-950">
+									LA
+								</span>
+								<span className="pointer-events-none absolute inset-0 rounded-2xl bg-white/10 opacity-0 group-hover:opacity-100 transition-opacity" />
+							</div>
+							<div className="flex flex-col leading-tight">
+								<span className="text-sm sm:text-base font-semibold tracking-tight">
+									LagoonAds
+								</span>
+								<span className="hidden sm:inline text-[11px] text-slate-400">
+									Breaking the scales
+								</span>
+							</div>
 						</Link>
 					</div>
+
+					{/* Center: Desktop nav */}
+					<ul className="hidden md:flex items-center gap-6 text-xs sm:text-sm">
+						{navItems.map((item) => (
+							<li key={item.to}>
+								<NavLink
+									to={item.to}
+									onClick={closeMenu}
+									className={({ isActive }) =>
+										[
+											'relative inline-flex items-center gap-1 transition-colors',
+											'text-slate-300 hover:text-slate-50',
+											isActive ? 'text-slate-50' : ''
+										].join(' ')
+									}
+								>
+									{({ isActive }) => (
+										<>
+											<span>{item.label}</span>
+											{isActive && (
+												<span className="absolute -bottom-1 left-0 right-0 mx-auto h-px w-5/6 bg-gradient-to-r from-lagoon-blue via-lagoon-turquoise to-lagoon-blue rounded-full" />
+											)}
+										</>
+									)}
+								</NavLink>
+							</li>
+						))}
+					</ul>
+
+					{/* Right: CTA + burger */}
+					<div className="flex items-center gap-3">
+						{/* Desktop CTA */}
+						<div className="hidden sm:block">
+							<Link to="/contact">
+								<Button size="sm">Let&apos;s talk</Button>
+							</Link>
+						</div>
+
+						{/* Mobile current page hint */}
+						<div className="md:hidden text-[11px] text-slate-400 mr-1">
+							{navItems.find((n) => n.to === location.pathname)?.label ??
+								'Menu'}
+						</div>
+
+						{/* Mobile menu button */}
+						<button
+							type="button"
+							onClick={toggleMenu}
+							className="md:hidden inline-flex items-center justify-center rounded-full border border-white/10 bg-slate-900/70 p-2 text-slate-200 hover:bg-slate-800/80 hover:border-lagoon-blue/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-lagoon-blue focus-visible:ring-offset-2 focus-visible:ring-offset-slate-950"
+							aria-label="Toggle navigation"
+							aria-expanded={open}
+						>
+							<span className="sr-only">Open main menu</span>
+							<div className="space-y-1.5">
+								<span
+									className={`block h-0.5 w-4 rounded-full bg-current transform transition-transform ${open ? 'translate-y-1.5 rotate-45' : ''
+										}`}
+								/>
+								<span
+									className={`block h-0.5 w-4 rounded-full bg-current transition-opacity ${open ? 'opacity-0' : 'opacity-100'
+										}`}
+								/>
+								<span
+									className={`block h-0.5 w-4 rounded-full bg-current transform transition-transform ${open ? '-translate-y-1.5 -rotate-45' : ''
+										}`}
+								/>
+							</div>
+						</button>
+					</div>
+				</nav>
+
+				{/* Mobile dropdown */}
+				<div
+					className={`
+						md:hidden border-t border-white/5 bg-slate-950/90 backdrop-blur-xl
+						transition-[max-height,opacity] duration-300 ease-out overflow-hidden
+						${open ? 'max-h-80 opacity-100' : 'max-h-0 opacity-0'}
+					`}
+				>
+					<div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 space-y-3">
+						<ul className="flex flex-col gap-1 text-sm">
+							{navItems.map((item) => {
+								const active = location.pathname === item.to;
+								return (
+									<li key={item.to}>
+										<NavLink
+											to={item.to}
+											onClick={closeMenu}
+											className={({ isActive }) =>
+												[
+													'flex items-center justify-between rounded-2xl px-3 py-2',
+													'transition-colors',
+													isActive || active
+														? 'bg-slate-900/80 text-slate-50'
+														: 'text-slate-300 hover:bg-slate-900/60 hover:text-slate-50'
+												].join(' ')
+											}
+										>
+											<span>{item.label}</span>
+											{(active || location.pathname === item.to) && (
+												<span className="h-1.5 w-1.5 rounded-full bg-lagoon-turquoise" />
+											)}
+										</NavLink>
+									</li>
+								);
+							})}
+						</ul>
+
+						<div className="pt-2 border-t border-white/5 flex justify-between items-center gap-3">
+							<div className="text-[11px] text-slate-400">
+								<span className="block">Need a custom setup?</span>
+								<span className="block text-slate-200">
+									Let&apos;s talk about your traffic.
+								</span>
+							</div>
+							<Link to="/contact" onClick={closeMenu}>
+								<Button size="sm">Contact</Button>
+							</Link>
+						</div>
+					</div>
 				</div>
-			)}
+			</div>
 		</header>
 	);
 };
