@@ -34,10 +34,10 @@ interface DotGridProps {
 	activeColor?: string;
 	proximity?: number;
 	speedTrigger?: number;
-	shockRadius?: number;
+	shockRadius?: number;    // kept for API, not strictly used in new click logic
 	shockStrength?: number;
 	maxSpeed?: number;
-	resistance?: number; // kept for API parity, not used in this simplified version
+	resistance?: number;     // kept for API parity, not used in this simplified version
 	returnDuration?: number;
 	className?: string;
 	style?: CSSProperties;
@@ -73,8 +73,8 @@ const DotGrid: React.FC<DotGridProps> = ({
 	baseColor = '#5227FF',
 	activeColor = '#5227FF',
 	proximity = 150,
-	speedTrigger = 100,
-	shockRadius = 250,
+	speedTrigger = 140,
+	shockRadius = 250,       // no longer the main limiter, we use grid diagonal
 	shockStrength = 5,
 	maxSpeed = 5000,
 	// resistance = 750,
@@ -183,11 +183,8 @@ const DotGrid: React.FC<DotGridProps> = ({
 					style = `rgb(${r},${g},${b})`;
 				}
 
-				const x = ox;
-				const y = oy;
-
 				ctx.save();
-				ctx.translate(x, y);
+				ctx.translate(ox, oy);
 				ctx.fillStyle = style;
 				ctx.fill(circlePath);
 				ctx.restore();
@@ -200,7 +197,7 @@ const DotGrid: React.FC<DotGridProps> = ({
 		return () => cancelAnimationFrame(rafId);
 	}, [proximity, baseColor, baseRgb, activeRgb, circlePath]);
 
-	// Build grid initially + on resize (with brute-force any-casts)
+	// Build grid initially + on resize
 	useEffect(() => {
 		buildGrid();
 
@@ -218,14 +215,11 @@ const DotGrid: React.FC<DotGridProps> = ({
 			handleResize = () => {
 				buildGrid();
 			};
-			// 👇 Brute-force cast to shut TS up
 			(window as any).addEventListener('resize', handleResize as any);
 		}
 
 		return () => {
-			if (ro) {
-				ro.disconnect();
-			}
+			if (ro) ro.disconnect();
 			if (handleResize && typeof window !== 'undefined') {
 				(window as any).removeEventListener('resize', handleResize as any);
 			}
@@ -260,21 +254,22 @@ const DotGrid: React.FC<DotGridProps> = ({
 			pr.vy = vy;
 			pr.speed = speed;
 
-			const canvas = canvasRef.current;
-			if (!canvas) return;
+			const wrap = wrapperRef.current;
+			if (!wrap) return;
 
-			const rect = canvas.getBoundingClientRect();
+			const rect = wrap.getBoundingClientRect();
 			pr.x = e.clientX - rect.left;
 			pr.y = e.clientY - rect.top;
 
+			// Swipe-based inertia (kept as-is, but you can lower speedTrigger for more sensitivity)
 			for (const dot of dotsRef.current) {
 				const dist = Math.hypot(dot.cx - pr.x, dot.cy - pr.y);
 				if (speed > speedTrigger && dist < proximity && !dot._inertiaApplied) {
 					dot._inertiaApplied = true;
 					gsap.killTweensOf(dot);
 
-					const pushX = (dot.cx - pr.x) * 0.3 + vx * 0.0015;
-					const pushY = (dot.cy - pr.y) * 0.3 + vy * 0.0015;
+					const pushX = (dot.cx - pr.x) * 0.18 + vx * 0.0010;
+					const pushY = (dot.cy - pr.y) * 0.18 + vy * 0.0010;
 
 					gsap.to(dot, {
 						xOffset: pushX,
@@ -298,32 +293,43 @@ const DotGrid: React.FC<DotGridProps> = ({
 		};
 
 		const onClick = (e: MouseEvent) => {
-			const canvas = canvasRef.current;
-			if (!canvas) return;
-			const rect = canvas.getBoundingClientRect();
+			const wrap = wrapperRef.current;
+			if (!wrap) return;
+
+			const rect = wrap.getBoundingClientRect();
 			const cx = e.clientX - rect.left;
 			const cy = e.clientY - rect.top;
 
+			// 🔥 Use the full grid diagonal as "max radius" so every click
+			// produces a smooth, global wave across the entire page.
+			const maxDist = Math.hypot(rect.width, rect.height);
+
 			for (const dot of dotsRef.current) {
 				const dist = Math.hypot(dot.cx - cx, dot.cy - cy);
-				if (dist < shockRadius && !dot._inertiaApplied) {
+
+				// Distance-based falloff: 1.0 at center → 0 at farthest point
+				const norm = 1 - dist / maxDist;
+				if (norm <= 0) continue;
+
+				const falloff = Math.pow(norm, 1.35); // smooth, a bit eased
+
+				if (!dot._inertiaApplied) {
 					dot._inertiaApplied = true;
 					gsap.killTweensOf(dot);
 
-					const falloff = Math.max(0, 1 - dist / shockRadius);
-					const pushX = (dot.cx - cx) * shockStrength * 0.6 * falloff;
-					const pushY = (dot.cy - cy) * shockStrength * 0.6 * falloff;
+					const pushX = (dot.cx - cx) * (shockStrength * 0.28) * falloff;
+					const pushY = (dot.cy - cy) * (shockStrength * 0.28) * falloff;
 
 					gsap.to(dot, {
 						xOffset: pushX,
 						yOffset: pushY,
-						duration: 0.4,
+						duration: 0.45,
 						ease: 'power3.out',
 						onComplete: () => {
 							gsap.to(dot, {
 								xOffset: 0,
 								yOffset: 0,
-								duration: returnDuration + 0.3,
+								duration: returnDuration + 0.25,
 								ease: 'elastic.out(1, 0.9)',
 								onComplete: () => {
 									dot._inertiaApplied = false;
@@ -348,7 +354,6 @@ const DotGrid: React.FC<DotGridProps> = ({
 		maxSpeed,
 		speedTrigger,
 		proximity,
-		shockRadius,
 		shockStrength,
 		returnDuration
 	]);

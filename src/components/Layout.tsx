@@ -17,10 +17,11 @@ const Layout: React.FC = () => {
 				baseColor="#020617"
 				activeColor="#38bdf8"
 				proximity={110}
-				shockRadius={220}
-				shockStrength={3.5}
-				maxSpeed={2200}
-				returnDuration={1.8}
+				shockRadius={220}       // kept but unused
+				shockStrength={1.8}     // ⬅️ gentler ripple
+				speedTrigger={40}       // ⬅️ more responsive
+				maxSpeed={1800}         // softer velocity bursts
+				returnDuration={1.9}    // slightly longer, smoother settle
 				className="opacity-18"
 			/>
 

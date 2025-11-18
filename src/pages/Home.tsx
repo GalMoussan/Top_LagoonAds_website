@@ -5,10 +5,34 @@ import Card from '../components/Card';
 import TestimonialCarousel from '../components/TestimonialCarousel';
 import GridDistortion from '../components/GridDistortion';
 import useInView from '../hooks/useInView';
+import MotionGridSection from '../components/MotionGridSection';
+
+import hero1 from '../assets/image1.jpg';
+import hero2 from '../assets/image2.jpg';
+import hero3 from '../assets/image3.jpg';
+import hero4 from '../assets/image4.jpg';
+import hero5 from '../assets/image5.jpg';
+import hero6 from '../assets/image6.jpg';
+import hero7 from '../assets/image7.jpg';
+import hero9 from '../assets/image9.jpg';
+import hero10 from '../assets/image10.jpg';
+import hero11 from '../assets/image11.jpg';
+
+const heroImages = [
+	hero1,
+	hero2,
+	hero3,
+	hero4,
+	hero5,
+	hero6,
+	hero7,
+	hero9,
+	hero10,
+	hero11
+];
 
 // Static bar heights for the mini-chart (so it doesn't jump on every render)
 const metricBars = [38, 72, 54, 83, 41, 69, 57, 92, 48, 76, 60, 88];
-
 const AnalyticsPanel: React.FC = () => {
 	const { ref, isInView } = useInView<HTMLDivElement>();
 
@@ -235,7 +259,18 @@ const NewsletterSection: React.FC = () => {
 	);
 };
 
+
 const Home: React.FC = () => {
+	const [heroIndex, setHeroIndex] = React.useState(0);
+
+	React.useEffect(() => {
+		const id = setInterval(() => {
+			setHeroIndex((prev) => (prev + 1) % heroImages.length);
+		}, 8000);
+
+		return () => clearInterval(id);
+	}, []);
+
 	return (
 		<div className="flex-1 flex flex-col gap-16">
 			<div className="space-y-16">
@@ -243,12 +278,11 @@ const Home: React.FC = () => {
 				<section className="relative">
 					<div className="relative h-[440px] sm:h-[520px] lg:h-[620px] rounded-4xl overflow-hidden border border-white/10 bg-slate-950/70 shadow-soft">
 						<GridDistortion
-							imageSrc="https://picsum.photos/1920/1080?grayscale"
+							imageSrc={heroImages[heroIndex]}
 							grid={18}
 							mouse={0.25}
 							strength={0.5}
 							relaxation={0.94}
-							className="opacity-100"
 						/>
 
 						{/* Gradient veil so text is readable but background visible */}
@@ -341,6 +375,9 @@ const Home: React.FC = () => {
 
 				{/* Testimonials – framed + animated */}
 				<TestimonialsSection />
+
+				{/* Motion grid section – Lagoon in motion */}
+				<MotionGridSection />
 
 				{/* Newsletter CTA – animated */}
 				<NewsletterSection />
