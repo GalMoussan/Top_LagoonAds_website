@@ -1,38 +1,22 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Button from '../components/Button';
-import Card from '../components/Card';
 import TestimonialCarousel from '../components/TestimonialCarousel';
 import GridDistortion from '../components/GridDistortion';
 import useInView from '../hooks/useInView';
 import MotionGridSection from '../components/MotionGridSection';
+import FeaturesShowcase from '../components/FeaturesShowcase';
 
 import hero1 from '../assets/image1.jpg';
 import hero2 from '../assets/image2.jpg';
-import hero3 from '../assets/image3.jpg';
-import hero4 from '../assets/image4.jpg';
-import hero5 from '../assets/image5.jpg';
 import hero6 from '../assets/image6.jpg';
-import hero7 from '../assets/image7.jpg';
-import hero9 from '../assets/image9.jpg';
 import hero10 from '../assets/image10.jpg';
-import hero11 from '../assets/image11.jpg';
 
-const heroImages = [
-	hero1,
-	hero2,
-	hero3,
-	hero4,
-	hero5,
-	hero6,
-	hero7,
-	hero9,
-	hero10,
-	hero11
-];
+const heroImages = [hero10, hero1, hero2, hero6];
 
 // Static bar heights for the mini-chart (so it doesn't jump on every render)
 const metricBars = [38, 72, 54, 83, 41, 69, 57, 92, 48, 76, 60, 88];
+
 const AnalyticsPanel: React.FC = () => {
 	const { ref, isInView } = useInView<HTMLDivElement>();
 
@@ -99,80 +83,11 @@ const AnalyticsPanel: React.FC = () => {
 				</div>
 
 				<p className="text-[11px] text-slate-400">
-					* Sample data for illustration. Your LagoonAds dashboard shows live numbers
-					by source, GEO, and device.
+					* Sample data for illustration. Your LagoonAds dashboard shows live
+					numbers by source, GEO, and device.
 				</p>
 			</div>
 		</div>
-	);
-};
-
-const FeaturesSection: React.FC = () => {
-	const { ref, isInView } = useInView<HTMLElement>();
-
-	return (
-		<section
-			ref={ref}
-			className={`space-y-6 transition-all duration-700 ease-out ${isInView ? 'opacity-100 translate-y-0' : 'opacity-0 translate-y-6'
-				}`}
-		>
-			<div className="flex items-end justify-between gap-4">
-				<div>
-					<p className="text-xs font-semibold uppercase tracking-wide text-lagoon-turquoise">
-						Why LagoonAds
-					</p>
-					<h2 className="text-2xl sm:text-3xl font-semibold text-slate-50 mt-1">
-						Built for performance-first partners
-					</h2>
-					<p className="mt-2 text-sm text-slate-300 max-w-xl">
-						We treat every click like an asset: routed, scored, and optimized to find
-						its best-performing destination, not just the highest bid.
-					</p>
-				</div>
-				<Link
-					to="/how-it-works"
-					className="hidden sm:inline-flex text-xs text-lagoon-blue hover:text-lagoon-turquoise transition-colors"
-				>
-					See how it works →
-				</Link>
-			</div>
-
-			<div className="grid gap-5 md:grid-cols-3">
-				<Card title="Smart routing" eyebrow="Monetization Engine">
-					<div className="space-y-2">
-						<p>
-							LagoonAds analyzes intent signals and device patterns to route each click
-							to the offer with the highest expected value, not just the top bidder.
-						</p>
-						<p className="text-[11px] text-lagoon-turquoise">
-							+10–25% RPM uplift reported by top partners.
-						</p>
-					</div>
-				</Card>
-				<Card title="Human + AI optimization" eyebrow="Performance Stack">
-					<div className="space-y-2">
-						<p>
-							Automation runs 24/7 — A/B testing, anomaly alerts, pacing — while our
-							team steps in where nuance and relationships matter most.
-						</p>
-						<p className="text-[11px] text-slate-400">
-							Daily feedback loops keep your feeds and traffic aligned.
-						</p>
-					</div>
-				</Card>
-				<Card title="Transparent collaboration" eyebrow="Partnership">
-					<div className="space-y-2">
-						<p>
-							Clean reporting, no black boxes, and honest conversations about what is
-							and isn&apos;t working — so we can scale together with confidence.
-						</p>
-						<p className="text-[11px] text-slate-400">
-							Shared dashboards and clear escalation paths.
-						</p>
-					</div>
-				</Card>
-			</div>
-		</section>
 	);
 };
 
@@ -259,14 +174,13 @@ const NewsletterSection: React.FC = () => {
 	);
 };
 
-
 const Home: React.FC = () => {
 	const [heroIndex, setHeroIndex] = React.useState(0);
 
 	React.useEffect(() => {
 		const id = setInterval(() => {
-			setHeroIndex((prev) => (prev + 1) % heroImages.length);
-		}, 8000);
+			setHeroIndex(prev => (prev + 1) % heroImages.length);
+		}, 60000); // 60s per hero
 
 		return () => clearInterval(id);
 	}, []);
@@ -303,8 +217,8 @@ const Home: React.FC = () => {
 							</p>
 
 							<p className="max-w-xl text-sm sm:text-base text-slate-300 mb-8">
-								A next-generation affiliate network built to squeeze more value from
-								every click while keeping your partners and users happy.
+								A next-generation affiliate network built to squeeze more value
+								from every click while keeping your partners and users happy.
 							</p>
 
 							<div className="flex flex-wrap justify-center gap-3">
@@ -336,9 +250,9 @@ const Home: React.FC = () => {
 							</span>
 						</h1>
 						<p className="text-sm sm:text-base text-slate-300 max-w-xl">
-							LagoonAds connects premium traffic owners with high-intent offers, using
-							smart routing and human expertise so every click finds its best
-							destination.
+							LagoonAds connects premium traffic owners with high-intent offers,
+							using smart routing and human expertise so every click finds its
+							best destination.
 						</p>
 
 						<div className="flex flex-wrap items-center gap-4">
@@ -371,7 +285,7 @@ const Home: React.FC = () => {
 				</section>
 
 				{/* Feature highlights – upgraded */}
-				<FeaturesSection />
+				<FeaturesShowcase />
 
 				{/* Testimonials – framed + animated */}
 				<TestimonialsSection />
